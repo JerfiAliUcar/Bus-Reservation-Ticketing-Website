@@ -8,24 +8,32 @@
     "net9.0": []
   },
   "packageFolders": {
-    "/Users/jerfiucar/.nuget/packages/": {}
+    "C:\\Users\\jerfi\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/jerfiucar/Desktop/Projects/bus-reservation-system/Bus-Reservation-Ticketing-Website/Bus-Reservation-Ticketing-Website.csproj",
+      "projectUniqueName": "C:\\Users\\jerfi\\Desktop\\Projeler\\Bus-Reservation-Ticketing-Website\\Bus-Reservation-Ticketing-Website.csproj",
       "projectName": "Bus-Reservation-Ticketing-Website",
-      "projectPath": "/Users/jerfiucar/Desktop/Projects/bus-reservation-system/Bus-Reservation-Ticketing-Website/Bus-Reservation-Ticketing-Website.csproj",
-      "packagesPath": "/Users/jerfiucar/.nuget/packages/",
-      "outputPath": "/Users/jerfiucar/Desktop/Projects/bus-reservation-system/Bus-Reservation-Ticketing-Website/obj/",
+      "projectPath": "C:\\Users\\jerfi\\Desktop\\Projeler\\Bus-Reservation-Ticketing-Website\\Bus-Reservation-Ticketing-Website.csproj",
+      "packagesPath": "C:\\Users\\jerfi\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\jerfi\\Desktop\\Projeler\\Bus-Reservation-Ticketing-Website\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/jerfiucar/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\jerfi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -68,7 +76,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.305/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
