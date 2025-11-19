@@ -1,0 +1,44 @@
+﻿/* css/style.css dosyanızdaki NAVBAR bölümünü bununla değiştirin */
+
+/* =========================================
+   2. NAVBAR (ÜST MENÜ) - GÜNCELLENDİ
+   ========================================= */
+#header {
+    background-color: #222 !important; /* Arka planı siyah yap */
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* Logo Stili */
+.navbar-brand {
+    font-size: 24px;
+    color: #fff !important;
+    letter-spacing: 1px;
+}
+
+/* Linklerin Stili */
+.navbar-nav .nav-link {
+    color: #fff !important; /* Yazı rengi beyaz */
+    font-weight: 500;
+    font-size: 14px;
+    margin-left: 15px; /* Linkler arası boşluk */
+    transition: 0.3s;
+}
+
+    /* Linke gelince (Hover) */
+    .navbar-nav .nav-link:hover {
+        color: #f8b600 !important; /* Sarı renk */
+    }
+
+/* Mobilde açılan menünün hizası */
+@media (max-width: 991px) {
+    .navbar-nav {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+        .navbar-nav .nav-link {
+            margin-left: 0;
+            margin-bottom: 10px;
+        }
+}
