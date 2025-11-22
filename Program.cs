@@ -7,11 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var connectionString = "Server=localhost;Database=BusReservationDB;User Id=sa;Password=(Albatros1905);TrustServerCertificate=True;";
+// Bu kod, "DefaultConnection" ismini hem appsettings.json'da hem de User Secrets'ta arar.
+// User Secrets'ta bulursa (ki sen ekledin), oradaki GERÇEK şifreyi kullanır.
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<Bus_Reservation_Ticketing_Website.Data.AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUser, Microsoft.AspNetCore.Identity.IdentityRole>(options=>
+builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUser, Microsoft.AspNetCore.Identity.IdentityRole<int>>(options=>
 {
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
