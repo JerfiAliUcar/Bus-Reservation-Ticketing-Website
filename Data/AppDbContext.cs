@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Bus_Reservation_Ticketing_Website.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Route = Bus_Reservation_Ticketing_Website.Data.Entity.Route;
+using Route = Bus_Reservation_Ticketing_Website.Data.Entity.Route; // İsim çakışması çözümü
+using Microsoft.AspNetCore.Identity;
+
 namespace Bus_Reservation_Ticketing_Website.Data;
 
-public partial class AppDbContext : IdentityDbContext<AppUser>
+public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
 {
     public AppDbContext()
     {
@@ -18,53 +20,76 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
     }
 
     public virtual DbSet<Booking> Bookings { get; set; }
-
     public virtual DbSet<Bus> Buses { get; set; }
-
     public virtual DbSet<Route> Routes { get; set; }
-
     public virtual DbSet<Schedule> Schedules { get; set; }
-
     public virtual DbSet<Ticket> Tickets { get; set; }
-
     public virtual DbSet<TicketAuditLog> TicketAuditLogs { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=localhost;Database=BusReservationDB;User Id=sa;Password=(Albatros1905);TrustServerCertificate=True;");
+    // GÜVENLİK VE ÇAKIŞMA ÖNLEMİ:
+    // OnConfiguring metodunu kapatıyoruz çünkü ayarları Program.cs dosyasından alacağız.
+    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //    => optionsBuilder.UseSqlServer("..."); 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder); //Identity framework için ekledik
+        base.OnModelCreating(modelBuilder); // Identity framework tabloları için ŞART!
+
+        // --- 1. GEREKSİZ TABLOLARI İPTAL ET ---
+        modelBuilder.Ignore<IdentityUserClaim<int>>();
+        modelBuilder.Ignore<IdentityRoleClaim<int>>();
+        modelBuilder.Ignore<IdentityUserLogin<int>>();
+        modelBuilder.Ignore<IdentityUserToken<int>>();
+
+
+
+        // --- 2. TABLO İSİMLERİNİ DÜZELT ---
+        // modelBuilder.Entity<AppUser>().ToTable("Users");
+        modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
+        modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
+
+
+        // --- 2. USERS TABLOSU AYARLARI ---
+        modelBuilder.Entity<AppUser>(b =>
+        {
+            b.ToTable("Users");
+
+            // DİKKAT: b.Ignore(u => u.PhoneNumber); SATIRINI SİLDİK! (Artık oluşacak)
+
+            // İstenmeyen Diğer Kolonlar (Hala iptal)
+            b.Ignore(u => u.PhoneNumberConfirmed); // Onay tikine gerek yok
+            b.Ignore(u => u.TwoFactorEnabled);
+            b.Ignore(u => u.LockoutEnd);
+            b.Ignore(u => u.LockoutEnabled);
+            b.Ignore(u => u.AccessFailedCount);
+        });
 
 
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACD0DEF3CD6");
+            entity.HasKey(e => e.BookingId); // Rastgele PK ismini sildik, standart olsun.
 
-            entity.HasIndex(e => e.Pnr, "UQ__Bookings__C5773DD36195211F").IsUnique();
+            entity.HasIndex(e => e.Pnr, "UQ_Bookings_PNR").IsUnique(); // İsim düzeldi
 
-            entity.Property(e => e.BookingId).HasColumnName("BookingID");
-            entity.Property(e => e.BookingDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.BookingStatus)
-                .HasMaxLength(20)
-                .HasDefaultValue("Confirmed");
-            entity.Property(e => e.Pnr)
-                .HasMaxLength(10)
-                .HasColumnName("PNR");
+            entity.Property(e => e.BookingDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            entity.Property(e => e.BookingStatus).HasMaxLength(20).HasDefaultValue("Confirmed");
+            entity.Property(e => e.Pnr).HasMaxLength(10).HasColumnName("PNR");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(450)
-                .HasColumnName("UserID");
+
+            // UserId'nin INT olduğunu ve Users tablosuna bağlı olduğunu belirtiyoruz:
+            entity.Property(e => e.UserId).HasColumnType("int");
+
+            // Opsiyonel: Eğer Booking -> User ilişkisi (FK) kesin olsun istiyorsan:
+            entity.HasOne<AppUser>()
+                  .WithMany()
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.SetNull); // Kullanıcı silinirse geçmiş biletleri kalsın (UserId null olur)
         });
 
         modelBuilder.Entity<Bus>(entity =>
         {
-            entity.HasKey(e => e.BusId).HasName("PK__Buses__6A0F60950824D4F2");
+            entity.HasKey(e => e.BusId);
 
-            entity.Property(e => e.BusId).HasColumnName("BusID");
             entity.Property(e => e.FirmName).HasMaxLength(50);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.Model).HasMaxLength(50);
@@ -73,22 +98,18 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Route>(entity =>
         {
-            entity.HasKey(e => e.RouteId).HasName("PK__Routes__80979AAD7053CA87");
+            entity.HasKey(e => e.RouteId);
 
-            entity.Property(e => e.RouteId).HasColumnName("RouteID");
             entity.Property(e => e.Destination).HasMaxLength(50);
             entity.Property(e => e.Origin).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Schedule>(entity =>
         {
-            entity.HasKey(e => e.ScheduleId).HasName("PK__Schedule__9C8A5B69B357C956");
+            entity.HasKey(e => e.ScheduleId);
 
-            entity.Property(e => e.ScheduleId).HasColumnName("ScheduleID");
-            entity.Property(e => e.BusId).HasColumnName("BusID");
             entity.Property(e => e.DepartureTime).HasColumnType("datetime");
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
-            entity.Property(e => e.RouteId).HasColumnName("RouteID");
 
             entity.HasOne(d => d.Bus).WithMany(p => p.Schedules)
                 .HasForeignKey(d => d.BusId)
@@ -103,19 +124,14 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Ticket>(entity =>
         {
-            entity.HasKey(e => e.TicketId).HasName("PK__Tickets__712CC627B1C36A3D");
+            entity.HasKey(e => e.TicketId);
 
             entity.HasIndex(e => new { e.ScheduleId, e.SeatNumber }, "UQ_Schedule_Seat").IsUnique();
 
-            entity.Property(e => e.TicketId).HasColumnName("TicketID");
-            entity.Property(e => e.BookingId).HasColumnName("BookingID");
             entity.Property(e => e.PaidAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.PassengerGender).HasMaxLength(1);
             entity.Property(e => e.PassengerName).HasMaxLength(100);
-            entity.Property(e => e.PassengerTckn)
-                .HasMaxLength(11)
-                .HasColumnName("PassengerTCKN");
-            entity.Property(e => e.ScheduleId).HasColumnName("ScheduleID");
+            entity.Property(e => e.PassengerTckn).HasMaxLength(11).HasColumnName("PassengerTCKN");
 
             entity.HasOne(d => d.Booking).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.BookingId)
@@ -130,15 +146,11 @@ public partial class AppDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<TicketAuditLog>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__TicketAu__5E5499A89E344435");
+            entity.HasKey(e => e.LogId);
 
-            entity.Property(e => e.LogId).HasColumnName("LogID");
-            entity.Property(e => e.ActionDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
+            entity.Property(e => e.ActionDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
             entity.Property(e => e.ActionType).HasMaxLength(50);
             entity.Property(e => e.OldPassengerName).HasMaxLength(100);
-            entity.Property(e => e.TicketId).HasColumnName("TicketID");
         });
 
         OnModelCreatingPartial(modelBuilder);
