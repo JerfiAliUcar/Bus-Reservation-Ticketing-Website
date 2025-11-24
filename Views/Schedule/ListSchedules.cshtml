@@ -1,0 +1,58 @@
+﻿@model List<ScheduleViewModel>
+
+
+<section class="about-banner banner-inner">
+    <div class="overlay-bg"></div>
+    <div class="container banner-content text-center">
+        <h1>Sefer Sonuçları</h1>
+    </div>
+</section>
+
+<section class="section-gap">
+    <div class="container">
+        <div class="row">
+           @*  <div class="col-lg-3 mb-4">
+                <div class="bg-white p-4 rounded shadow-sm">
+                    <h5>Filtrele</h5>
+                    <hr>
+                    <div class="form-group">
+                        <label>Kalkış Zamanı</label>
+                        <select class="form-control"><option>Tümü</option><option>Sabah</option><option>Akşam</option></select>
+                    </div>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="check1">
+                        <label class="custom-control-label" for="check1">2+1 Rahat</label>
+                    </div>
+                </div>
+            </div> *@
+
+
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-9">
+                    <div class="ticket-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <h5>@item.Bus.FirmName.ToString()</h5>
+                                <span class="badge badge-secondary">2+1 Rahat</span>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <div class="d-flex justify-content-between align-items-center px-5">
+                                    <div><h4>@item.DepartureTime.ToShortTimeString()</h4><small>@item.Route.Origin.ToString()</small></div>
+                                    <div><i class="fa fa-arrow-right text-muted"></i></div>
+                                    <div><h4>@item.DepartureTime.AddMinutes(item.Route.DurationMinutes).ToShortTimeString()</h4><small>@item.Route.Destination.ToString()</small></div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center border-left">
+                                <span class="price-tag mb-2">@item.Price₺</span>
+                                <a href="seat-selection.html" class="primary-btn btn-sm">Koltuk Seç</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+        </div>
+    </div>
+</section>

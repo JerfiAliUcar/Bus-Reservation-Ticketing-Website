@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Bus_Reservation_Ticketing_Website.Data;
+using Bus_Reservation_Ticketing_Website.Data.Entity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +15,9 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<Bus_Reservation_Ticketing_Website.Data.AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUser, Microsoft.AspNetCore.Identity.IdentityRole<int>>(options=>
+//builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<AppDbContext>();
+
+builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUser, Microsoft.AspNetCore.Identity.IdentityRole<int>>(options =>
 {
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
@@ -23,6 +27,7 @@ builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUs
 })
     .AddEntityFrameworkStores<Bus_Reservation_Ticketing_Website.Data.AppDbContext>()
     .AddDefaultTokenProviders();
+    //.AddDefaultUI(); //Scafold sayfalarını aktifleştimek için
 
 var app = builder.Build();
 
@@ -46,5 +51,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
-
+//app.MapRazorPages(); //Scafold sayfalarını kullanmak için
 app.Run();
