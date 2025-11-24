@@ -1,89 +1,57 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Bus_Reservation_Ticketing_Website</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Bus_Reservation_Ticketing_Website.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="~/css/style.css">
+    <title>@ViewData["Title"] - BusTravel</title>
 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark" id="header">
-            <div class="container">
-                <a class="navbar-brand font-weight-bold" asp-area="" asp-controller="Home" asp-action="Index">
-                    BUS TRAVEL
-                </a>
-
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarMenu">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Results">Seferler</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">Hakkımızda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Contact">İletişim</a>
-                        </li>
-                    </ul>
-                </div>
+    <header id="header">
+        <div class="container d-flex align-items-center justify-content-between">
+            <div id="logo">
+                <a asp-controller="Home" asp-action="Index" class="h4 text-white font-weight-bold">BUS TRAVEL</a>
             </div>
-        </nav>
+            <nav class="nav-menu d-none d-lg-block">
+                <ul class="navbar-nav d-flex flex-row">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Schedule" asp-action="ListSchedules">Seferler</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="AboutUs">Hakkımızda</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">İletişim</a></li>
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item"><a class="nav-link" href="#">Selam, @User.Identity.Name</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Logout">Çıkış</a></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Giriş</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Kayıt</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="container-fluid p-0">
+        @RenderBody()
     </div>
 
-    <footer class="footer-area bg-dark text-white py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <h6 class="text-uppercase mb-3">BusTravel Hakkında</h6>
-                    <p class="small text-muted">
-                        Türkiye'nin en geniş otobüs ağına sahip dijital bilet platformu.
-                    </p>
-                </div>
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <h6 class="text-uppercase mb-3">Hızlı Linkler</h6>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-muted">Ana Sayfa</a></li>
-                        <li><a href="#" class="text-muted">Seferler</a></li>
-                        <li><a href="#" class="text-muted">İletişim</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-4 col-md-6">
-                    <h6 class="text-uppercase mb-3">İletişim</h6>
-                    <p class="small text-muted">destek@bustravel.com</p>
-                </div>
-            </div>
-            <div class="border-top border-secondary pt-4 mt-4 text-center small text-muted">
-                Copyright &copy; 2025 BusTravel
-            </div>
+    <footer class="footer-area">
+        <div class="container text-center">
+            <p>Copyright &copy; 2025 BusTravel</p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

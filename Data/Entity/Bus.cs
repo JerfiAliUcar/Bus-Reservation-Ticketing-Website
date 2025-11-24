@@ -13,8 +13,6 @@ public partial class Bus
 
     public string? Model { get; set; }
 
-    public int TotalSeats { get; set; }
-
     public bool? IsActive { get; set; }
 
     public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
