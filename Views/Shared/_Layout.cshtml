@@ -27,12 +27,12 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item"><a class="nav-link" href="#">Selam, @User.Identity.Name</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Logout">Çıkış</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Logout">Çıkış</a></li>
                     }
                     else
                     {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Login">Giriş</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Account" asp-action="Register">Kayıt</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Login">Giriş</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Register">Kayıt</a></li>
                     }
                 </ul>
             </nav>

@@ -35,18 +35,18 @@ public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>
     {
         base.OnModelCreating(modelBuilder); // Identity framework tabloları için ŞART!
 
-        // --- 1. GEREKSİZ TABLOLARI İPTAL ET ---
-        modelBuilder.Ignore<IdentityUserClaim<int>>();
-        modelBuilder.Ignore<IdentityRoleClaim<int>>();
-        modelBuilder.Ignore<IdentityUserLogin<int>>();
-        modelBuilder.Ignore<IdentityUserToken<int>>();
 
 
 
-        // --- 2. TABLO İSİMLERİNİ DÜZELT ---
-        // modelBuilder.Entity<AppUser>().ToTable("Users");
+
+        //  TABLO İSİMLERİNİ DÜZELT 
+        modelBuilder.Entity<AppUser>().ToTable("Users");
         modelBuilder.Entity<IdentityRole<int>>().ToTable("Roles");
         modelBuilder.Entity<IdentityUserRole<int>>().ToTable("UserRoles");
+        modelBuilder.Entity<IdentityUserClaim<int>>().ToTable("UserClaims");
+        modelBuilder.Entity<IdentityUserLogin<int>>().ToTable("UserLogins");
+        modelBuilder.Entity<IdentityRoleClaim<int>>().ToTable("RoleClaims");
+        modelBuilder.Entity<IdentityUserToken<int>>().ToTable("UserTokens");
 
 
         // --- 2. USERS TABLOSU AYARLARI ---
@@ -56,8 +56,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>
 
             // DİKKAT: b.Ignore(u => u.PhoneNumber); SATIRINI SİLDİK! (Artık oluşacak)
 
-            // İstenmeyen Diğer Kolonlar (Hala iptal)
-            b.Ignore(u => u.PhoneNumberConfirmed); // Onay tikine gerek yok
+            b.Ignore(u => u.PhoneNumberConfirmed);
             b.Ignore(u => u.TwoFactorEnabled);
             b.Ignore(u => u.LockoutEnd);
             b.Ignore(u => u.LockoutEnabled);
@@ -67,23 +66,30 @@ public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>
 
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId); // Rastgele PK ismini sildik, standart olsun.
-
-            entity.HasIndex(e => e.Pnr, "UQ_Bookings_PNR").IsUnique(); // İsim düzeldi
-
+            entity.HasKey(e => e.BookingId);
+            entity.HasIndex(e => e.Pnr, "UQ_Bookings_PNR").IsUnique();
             entity.Property(e => e.BookingDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
             entity.Property(e => e.BookingStatus).HasMaxLength(20).HasDefaultValue("Confirmed");
             entity.Property(e => e.Pnr).HasMaxLength(10).HasColumnName("PNR");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
-
-            // UserId'nin INT olduğunu ve Users tablosuna bağlı olduğunu belirtiyoruz:
             entity.Property(e => e.UserId).HasColumnType("int");
+            //entity.HasKey(e => e.BookingId); // Rastgele PK ismini sildik, standart olsun.
 
-            // Opsiyonel: Eğer Booking -> User ilişkisi (FK) kesin olsun istiyorsan:
-            entity.HasOne<AppUser>()
-                  .WithMany()
-                  .HasForeignKey(e => e.UserId)
-                  .OnDelete(DeleteBehavior.SetNull); // Kullanıcı silinirse geçmiş biletleri kalsın (UserId null olur)
+            //entity.HasIndex(e => e.Pnr, "UQ_Bookings_PNR").IsUnique(); // İsim düzeldi
+
+            //entity.Property(e => e.BookingDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
+            //entity.Property(e => e.BookingStatus).HasMaxLength(20).HasDefaultValue("Confirmed");
+            //entity.Property(e => e.Pnr).HasMaxLength(10).HasColumnName("PNR");
+            //entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
+
+            //// UserId'nin INT olduğunu ve Users tablosuna bağlı olduğunu belirtiyoruz:
+            //entity.Property(e => e.UserId).HasColumnType("int");
+
+            //// Opsiyonel: Eğer Booking -> User ilişkisi (FK) kesin olsun istiyorsan:
+            //entity.HasOne<AppUser>()
+            //      .WithMany()
+            //      .HasForeignKey(e => e.UserId)
+            //      .OnDelete(DeleteBehavior.SetNull); // Kullanıcı silinirse geçmiş biletleri kalsın (UserId null olur)
         });
 
         modelBuilder.Entity<Bus>(entity =>
