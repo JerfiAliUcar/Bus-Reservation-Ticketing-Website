@@ -22,5 +22,8 @@ namespace Bus_Reservation_Ticketing_Website.Models
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Şifreler uyuşmuyor.")]
         public string ConfirmPassword { get; set; }
+
+        [Required(ErrorMessage = "Telefon numarası alanı zorunludur.")]
+        public string PhoneNumber { get; set; }
     }
 }

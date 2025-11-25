@@ -13,5 +13,6 @@ namespace Bus_Reservation_Ticketing_Website.Models
         public string Password { get; set; }
 
         public bool RememberMe { get; set; }
+
     }
 }
