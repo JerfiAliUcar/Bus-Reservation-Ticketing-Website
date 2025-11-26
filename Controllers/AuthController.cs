@@ -9,13 +9,13 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly AppDbContext _db;
+        //private readonly AppDbContext _db;
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
-        public AuthController(AppDbContext db, UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AuthController(/*AppDbContext db,*/ UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            _db = db;
+            //_db = db;
             _userManager = userManager;
             _signInManager = signInManager;
         }
@@ -42,12 +42,14 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber,
                 EmailConfirmed = true //E-posta doğrulamasını atlamak için
+                
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
-            {
+            {                
+                await _userManager.AddToRoleAsync(user, "Member");
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }

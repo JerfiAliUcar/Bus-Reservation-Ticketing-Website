@@ -27,7 +27,7 @@ builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUs
 })
     .AddEntityFrameworkStores<Bus_Reservation_Ticketing_Website.Data.AppDbContext>()
     .AddDefaultTokenProviders();
-    //.AddDefaultUI(); //Scafold sayfalarını aktifleştimek için
+//.AddDefaultUI(); //Scafold sayfalarını aktifleştimek için
 
 var app = builder.Build();
 
@@ -46,10 +46,20 @@ app.UseAuthorization();
 
 app.MapStaticAssets();
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas",
+      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+    );
+});
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
+    pattern: "{controller=Home}/{action=Index}/{id?}") ///Home/Index
     .WithStaticAssets();
+
+
 
 //app.MapRazorPages(); //Scafold sayfalarını kullanmak için
 app.Run();

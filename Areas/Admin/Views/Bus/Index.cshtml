@@ -1,0 +1,61 @@
+﻿@model IEnumerable<Bus>
+<div class="container-fluid">
+
+    <h1 class="h3 mb-2 text-gray-800">Otobüsler</h1>
+    <p class="mb-4">
+        Firmamıza kayıtlı otobüslerin listesi. Bu sayfadan otobüsleri inceleyebilir, düzenleyebilir veya silebilirsiniz.
+        <span class="text-danger">Otobüsleri silmek veya düzenlemek için Admin yetkinizin olması gerekmektedir.</span>
+    </p>
+
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a class="btn btn-primary" asp-action="Create">Create</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>BusId</th>
+                            <th>FirmName</th>
+                            <th>Model</th>
+                            <th>PlateNumber</th>
+                            <th>IsActive</th>
+                            <th>Operation</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.BusId</td>
+                                <td>@item.FirmName</td>
+                                <td>@item.Model</td>
+                                <td>@item.PlateNumber</td>
+                                <td>
+                                    @{
+                                        if (item.IsActive == true)
+                                        {
+                                            <span class="text-success">Active</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-danger">Inactive</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning" asp-area="Admin" asp-controller="Bus" asp-action="Edit" asp-route-id="@item.BusId">Edit</a>
+                                    <a class="btn btn-danger" asp-area="Admin" asp-controller="Bus" asp-action="Delete" asp-route-id="@item.BusId">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
