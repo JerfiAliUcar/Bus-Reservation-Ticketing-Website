@@ -11,9 +11,9 @@ public partial class Bus
 
     public string FirmName { get; set; } = null!;
 
-    public string? Model { get; set; }
+    public string Model { get; set; }
 
-    public bool? IsActive { get; set; }
+    public bool IsActive { get; set; }
 
     public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
 }
