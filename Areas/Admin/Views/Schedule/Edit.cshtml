@@ -1,0 +1,62 @@
+﻿@model Bus_Reservation_Ticketing_Website.Data.Entity.Schedule
+
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0"><i class="fas fa-edit"></i> Sefer Düzenle</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <input type="hidden" asp-for="ScheduleId" />
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="RouteId" class="form-label fw-bold">Güzergah</label>
+                                <select asp-for="RouteId" class="form-control" asp-items="ViewBag.Routes"></select>
+                                <span asp-validation-for="RouteId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="BusId" class="form-label fw-bold">Otobüs</label>
+                                <select asp-for="BusId" class="form-control" asp-items="ViewBag.Buses"></select>
+                                <span asp-validation-for="BusId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DepartureTime" class="form-label fw-bold">Kalkış Zamanı</label>
+                                <input asp-for="DepartureTime" class="form-control" />
+                                <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Price" class="form-label fw-bold">Bilet Fiyatı (₺)</label>
+                                <div class="input-group">
+                                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
+                                    <span class="input-group-text">₺</span>
+                                </div>
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+                            <a asp-action="Index" class="btn btn-secondary me-md-2">Vazgeç</a>
+                            <button type="submit" class="btn btn-warning px-4"><i class="fas fa-save"></i> Güncelle</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* @section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+} *@

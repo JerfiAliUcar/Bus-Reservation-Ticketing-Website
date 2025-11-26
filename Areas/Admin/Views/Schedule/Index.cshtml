@@ -1,0 +1,70 @@
+﻿@using Bus_Reservation_Ticketing_Website.Data.Entity
+@model IEnumerable<Schedule>
+
+
+
+<div class="container-fluid">
+
+    <h1 class="h3 mb-2 text-gray-800">Seferler (Schedules)</h1>
+    <p class="mb-4">
+        Planlanan tüm seferlerin listesi. Buradan yeni sefer ekleyebilir veya iptal edebilirsiniz.
+    </p>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a class="btn btn-primary" asp-action="Create">
+                <i class="fas fa-plus"></i> Yeni Sefer Planla
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Güzergah</th>
+                            <th>Otobüs / Firma</th>
+                            <th>Kalkış Tarihi</th>
+                            <th>Fiyat</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.ScheduleId</td>
+                                <td>
+                                    <span class="font-weight-bold">@item.Route.Origin > @item.Route.Destination</span>
+                                    <br />
+                                    <small class="text-muted">(@item.Route.DistanceKm km)</small>
+                                </td>
+                                <td>
+                                    @item.Bus.PlateNumber
+                                    <br />
+                                    <small class="text-muted">@item.Bus.FirmName (@item.Bus.Model)</small>
+                                </td>
+                                <td>
+                                    @item.DepartureTime.ToString("dd.MM.yyyy HH:mm")
+                                </td>
+                                <td>
+                                    <span class="badge badge-success" style="font-size: 14px">@item.Price ₺</span>
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm text-dark" asp-action="Edit" asp-route-id="@item.ScheduleId">
+                                        <i class="fas fa-edit"></i> Düzenle
+                                    </a>
+
+                                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.ScheduleId"
+                                       onclick="return confirm('Bu seferi iptal etmek/silmek istediğinize emin misiniz?');">
+                                        <i class="fas fa-trash"></i> İptal Et
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model Bus_Reservation_Ticketing_Website.Data.Entity.Route
+
+@{
+    ViewData["Title"] = "Güzergah Güncelle";
+    // Layout _ViewStart.cshtml dosyasında tanımlı olduğu için buraya eklemedim.
+}
+
+<form method="post" asp-action="Edit">
+
+    <input type="hidden" asp-for="RouteId" />
+
+    <div class="border p-3 mt-5">
+        <div class="row pb-3">
+            <h2 class="text-primary">Güzergah Güncelle</h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Origin" class="form-label">Kalkış Yeri</label>
+            <input asp-for="Origin" class="form-control" />
+            <span asp-validation-for="Origin" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Destination" class="form-label">Varış Yeri</label>
+            <input asp-for="Destination" class="form-control" />
+            <span asp-validation-for="Destination" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DistanceKm" class="form-label">Mesafe (KM)</label>
+            <input asp-for="DistanceKm" class="form-control" type="number" />
+            <span asp-validation-for="DistanceKm" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DurationMinutes" class="form-label">Süre (Dakika)</label>
+            <input asp-for="DurationMinutes" class="form-control" type="number" />
+            <span asp-validation-for="DurationMinutes" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <button type="submit" class="btn btn-lg btn-primary w-100">Güncelle (Edit)</button>
+            </div>
+            <div class="col-6">
+                <a asp-area="Admin" asp-controller="Route" asp-action="Index" class="btn btn-lg btn-secondary w-100">
+                    Listeye Dön
+                </a>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
