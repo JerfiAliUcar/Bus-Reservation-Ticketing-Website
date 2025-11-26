@@ -9,18 +9,24 @@
             <div class="col-lg-6 banner-content">
                 <h1 class="display-4 font-weight-bold text-white">Türkiye'nin Her Yerine<br>Konforlu Yolculuk</h1>
                 <p class="mt-3 mb-4 text-white">En uygun fiyatlarla biletini al, güvenle seyahat et.</p>
-                <a href="#" class="primary-btn">Bilet Ara</a>
+                
             </div>
 
             <div class="col-lg-5 banner-content">
                 <div class="search-box text-dark">
                     <h4 class="mb-4">Otobüs Bileti Bul</h4>
-                    <form>
-                        <input type="text" class="form-control" placeholder="Nereden">
-                        <input type="text" class="form-control" placeholder="Nereye">
-                        <input type="date" class="form-control">
-                        <button class="primary-btn w-100 border-0">Seferleri Listele</button>
+
+                    <form asp-controller="Schedule" asp-action="Index" method="get">
+
+                        <input type="text" name="from" class="form-control" placeholder="Nereden (İl)">
+
+                        <input type="text" name="to" class="form-control" placeholder="Nereye (İl)">
+
+                        <input type="date" name="date" class="form-control">
+
+                        <button type="submit" class="primary-btn w-100 border-0">Seferleri Listele</button>
                     </form>
+
                 </div>
             </div>
 

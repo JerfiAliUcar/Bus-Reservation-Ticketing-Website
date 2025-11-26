@@ -1,0 +1,93 @@
+﻿@model IEnumerable<Schedule>
+
+@{
+    ViewData["Title"] = "Sefer Arama Sonuçları";
+}
+
+<div class="bg-light py-4 mb-5">
+    <div class="container">
+        <h3>
+            @if (ViewBag.From != null || ViewBag.To != null)
+            {
+                <text>@ViewBag.From > @ViewBag.To Seferleri</text>
+            }
+            else
+            {
+                <text>Tüm Seferler</text>
+            }
+        </h3>
+        <p class="text-muted mb-0">
+            @if (Model.Any())
+            {
+                <text>Aradığınız kriterlere uygun @Model.Count() sefer bulundu.</text>
+            }
+            else
+            {
+                <text>Maalesef uygun sefer bulunamadı.</text>
+            }
+        </p>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">Filtrele</div>
+                <div class="card-body">
+                    <p>Buraya saat aralığı, firma seçimi gibi filtreler eklenebilir.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            @foreach (var item in Model)
+            {
+                <div class="card shadow-sm mb-4 border-left-primary ticket-card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+
+                            <div class="col-md-3 text-center">
+                                <h5 class="font-weight-bold mb-0">@item.Bus.FirmName</h5>
+                                <small class="text-muted">@item.Bus.Model (@item.Bus.PlateNumber)</small>
+                            </div>
+
+                            <div class="col-md-5 text-center">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h4 class="mb-0">@item.DepartureTime.ToString("HH:mm")</h4>
+                                        <small>@item.Route.Origin</small>
+                                    </div>
+                                    <div class="px-2">
+                                        <i class="fa fa-long-arrow-right text-muted"></i>
+                                        <br>
+                                        <small>@item.Route.DurationMinutes dk</small>
+                                    </div>
+                                    <div>
+                                        <h4 class="mb-0">@item.DepartureTime.AddMinutes(item.Route.DurationMinutes).ToString("HH:mm")</h4>
+                                        <small>@item.Route.Destination</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4 text-center border-left">
+                                <h3 class="text-primary font-weight-bold">@item.Price ₺</h3>
+                                <a asp-action="Details" asp-route-id="@Model.First().ScheduleId" class="btn btn-warning btn-block mt-2">
+                                    Koltuk Seç <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-warning text-center">
+                    Aradığınız kriterlere uygun sefer bulunamadı. Lütfen tarih değiştirip tekrar deneyin.
+                </div>
+            }
+        </div>
+    </div>
+</div>
