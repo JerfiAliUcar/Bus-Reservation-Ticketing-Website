@@ -1,0 +1,60 @@
+﻿@using Bus_Reservation_Ticketing_Website.Data.Entity
+@model IEnumerable<Route>
+
+<div class="container-fluid">
+
+    <h1 class="h3 mb-2 text-gray-800">Güzergahlar</h1>
+    <p class="mb-4">
+        Sistemde kayıtlı olan tüm güzergahların listesi. Buradan yeni güzergah ekleyebilir, mevcutları düzenleyebilir veya silebilirsiniz.
+        <span class="text-danger">İşlemler için Admin yetkisi gereklidir.</span>
+    </p>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a class="btn btn-primary" asp-area="Admin" asp-controller="Route" asp-action="Create">Yeni Güzergah Ekle</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Kalkış Yeri (Origin)</th>
+                            <th>Varış Yeri (Destination)</th>
+                            <th>Mesafe (Km)</th>
+                            <th>Süre (Dk)</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.RouteId</td>
+                                <td>@item.Origin</td>
+                                <td>@item.Destination</td>
+                                <td>@item.DistanceKm km</td>
+                                <td>
+                                    @{
+                                        var hours = item.DurationMinutes / 60;
+                                        var minutes = item.DurationMinutes % 60;
+                                        var durationText = $"{hours} sa {minutes} dk";
+                                        if (hours == 0) { durationText = $"{minutes} dk"; }
+                                    }
+                                    @durationText
+                                </td>
+                                <td>
+                                    <a class="btn btn-warning btn-sm" asp-area="Admin" asp-controller="Route" asp-action="Edit" asp-route-id="@item.RouteId">Düzenle</a>
+                                    <a class="btn btn-danger btn-sm" asp-area="Admin" asp-controller="Route" asp-action="Delete" asp-route-id="@item.RouteId"
+                                       onclick="return confirm('Bu güzergahı silmek istediğinize emin misiniz?');">Sil</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
