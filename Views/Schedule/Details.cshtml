@@ -1,0 +1,154 @@
+﻿@model Bus_Reservation_Ticketing_Website.Data.Entity.Schedule
+
+@{
+    ViewData["Title"] = "Koltuk Seç";
+    var soldSeats = ViewBag.SoldSeats as List<int> ?? new List<int>();
+    int totalSeats = 30;
+}
+
+<style>
+    /* Checkbox'ın kendisini gizliyoruz (Çirkin kutucuk görünmesin) */
+    .seat-checkbox {
+        display: none;
+    }
+
+    /* Checkbox'ın etiketi (Koltuk Görünümü) */
+    .seat-label {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 45px;
+        height: 45px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 8px 8px 4px 4px;
+        cursor: pointer;
+        font-weight: bold;
+        color: #555;
+        user-select: none;
+    }
+
+    /* Seçilince (Checked olunca) Rengi Yeşil Yap */
+    .seat-checkbox:checked + .seat-label {
+        background-color: #28a745;
+        color: white;
+        border-color: #1e7e34;
+    }
+
+    /* Dolu Koltuk (Kırmızı ve Tıklanamaz) */
+    .seat-sold {
+        width: 45px;
+        height: 45px;
+        background-color: #dc3545;
+        color: white;
+        border: 1px solid #bd2130;
+        border-radius: 8px 8px 4px 4px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    /* Düzen Ayarları */
+    .bus-layout {
+        max-width: 300px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 2px solid #eee;
+        border-radius: 20px;
+    }
+
+    .seat-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+    .gap {
+        width: 40px;
+    }
+    /* Koridor */
+</style>
+
+<div class="container mt-5">
+    <h3 class="text-center mb-4">Koltuk Seçimi</h3>
+
+    <div class="row">
+        <div class="col-md-7">
+            <form asp-controller="Booking" asp-action="Create" method="get">
+
+                <input type="hidden" name="scheduleId" value="@Model.ScheduleId" />
+
+                <div class="bus-layout">
+                    <div class="text-end mb-4 border-bottom pb-2">👮 Şoför</div>
+
+                    @{
+                        int seatCounter = 1;
+                        int rowCount = (int)Math.Ceiling((double)totalSeats / 3);
+                    }
+
+                    @for (int i = 0; i < rowCount; i++)
+                    {
+                        <div class="seat-row">
+                            <div>
+                                @if (soldSeats.Contains(seatCounter))
+                                {
+                                    <div class="seat-sold">@seatCounter</div>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="seat-checkbox" id="seat-@seatCounter" name="selectedSeats" value="@seatCounter">
+                                    <label class="seat-label" for="seat-@seatCounter">@seatCounter</label>
+                                }
+                                @{
+                                    seatCounter++;
+                                }
+                            </div>
+
+                            <div class="gap"></div> <div style="display:flex; gap:10px;">
+                                @for (int j = 0; j < 2; j++)
+                                {
+                                    if (seatCounter <= totalSeats)
+                                    {
+                                        if (soldSeats.Contains(seatCounter))
+                                        {
+                                            <div class="seat-sold">@seatCounter</div>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="seat-checkbox" id="seat-@seatCounter" name="selectedSeats" value="@seatCounter">
+                                            <label class="seat-label" for="seat-@seatCounter">@seatCounter</label>
+                                        }
+                                        seatCounter++;
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="text-center mt-4">
+                    <div class="alert alert-info">
+                        Seçim yaptıktan sonra butona basınız. Toplam tutar bir sonraki sayfada hesaplanacaktır.
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-lg w-100">Ödemeye Geç</button>
+                </div>
+
+            </form>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">Sefer Bilgileri</div>
+                <div class="card-body">
+                    <p><strong>Güzergah:</strong> @Model.Route.Origin > @Model.Route.Destination</p>
+                    <p><strong>Otobüs:</strong> @Model.Bus.FirmName</p>
+                    <p><strong>Tarih:</strong> @Model.DepartureTime.ToString("dd.MM.yyyy HH:mm")</p>
+                    <p><strong>Bilet Fiyatı:</strong> @Model.Price ₺</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -24,6 +24,7 @@ namespace Bus_Reservation_Ticketing_Website.Models
         public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Telefon numarası alanı zorunludur.")]
+        [MaxLength(11)]
         public string PhoneNumber { get; set; }
     }
 }
