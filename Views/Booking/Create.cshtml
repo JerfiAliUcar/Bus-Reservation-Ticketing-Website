@@ -1,0 +1,105 @@
+﻿@model Bus_Reservation_Ticketing_Website.Data.Entity.Schedule
+
+@{
+    ViewData["Title"] = "Ödeme";
+    var seats = ViewBag.SelectedSeats as List<int>;
+    string seatString = string.Join(", ", seats);
+}
+
+<section class="about-banner relative" style="background: #333; padding: 60px 0;">
+    <div class="container">
+        <div class="row d-flex align-items-center justify-content-center">
+            <div class="about-content col-lg-12 text-center">
+                <h1 class="text-white">Ödeme & Yolcu Bilgileri</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact-page-area section-gap" style="padding: 80px 0;">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8">
+                <form action="/Booking/Create" method="post">
+
+                    <input type="hidden" name="scheduleId" value="@Model.ScheduleId" />
+                    <input type="hidden" name="selectedSeats" value="@ViewBag.SeatString" />
+
+                    <h4 class="mb-3">Yolcu Bilgileri</h4>
+                    <div class="row mb-4">
+                        <div class="col-md-12 form-group mb-3">
+                            <label>Ad Soyad</label>
+                            <input name="passengerName" placeholder="Adınız Soyadınız" class="form-control" required type="text">
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label>TC Kimlik No</label>
+                            <input name="passengerTCKN" placeholder="11 Haneli TC" class="form-control" required type="text" maxlength="11">
+                        </div>
+                        <div class="col-md-6 form-group mb-3">
+                            <label>Telefon</label>
+                            <input name="passengerPhone" placeholder="5XX..." class="form-control" required type="tel">
+                        </div>
+                        <div class="col-md-12 form-group mb-3">
+                            <label>E-Posta</label>
+                            <input name="passengerEmail" placeholder="Biletin gönderileceği e-posta" class="form-control" required type="email" value="@User.Identity.Name">
+                        </div>
+                    </div>
+
+                    <h4 class="mb-3">Kart Bilgileri <small class="text-muted">(Demo - Kaydedilmez)</small></h4>
+                    <div class="row p-3 border rounded bg-light mb-4">
+                        <div class="col-md-12 form-group mt-2 mb-3">
+                            <input placeholder="Kart Üzerindeki İsim" class="form-control" type="text">
+                        </div>
+                        <div class="col-md-12 form-group mb-3">
+                            <input placeholder="Kart Numarası" class="form-control" type="text">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <input placeholder="SKT (AA/YY)" class="form-control" type="text">
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <input placeholder="CVC" class="form-control" type="text" maxlength="3">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 text-right">
+                        <button type="submit" class="btn btn-warning btn-lg w-100 font-weight-bold">
+                            Güvenli Ödeme Yap (@ViewBag.TotalPrice ₺)
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">Sepet Özeti</div>
+                    <div class="card-body">
+                        <p class="d-flex justify-content-between">
+                            <span>Güzergah:</span>
+                            <strong>@Model.Route.Origin > @Model.Route.Destination</strong>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span>Otobüs:</span>
+                            <strong>@Model.Bus.FirmName</strong>
+                        </p>
+                        <p class="d-flex justify-content-between">
+                            <span>Tarih:</span>
+                            <strong>@Model.DepartureTime.ToString("dd.MM.yyyy HH:mm")</strong>
+                        </p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>Koltuklar:</span>
+                            <span class="badge bg-warning text-dark p-2" style="font-size: 14px;">@seatString</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4>Toplam:</h4>
+                            <h3 class="text-primary">@ViewBag.TotalPrice ₺</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>

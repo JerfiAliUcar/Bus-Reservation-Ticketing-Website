@@ -29,6 +29,14 @@ builder.Services.AddIdentity<Bus_Reservation_Ticketing_Website.Data.Entity.AppUs
     .AddDefaultTokenProviders();
 //.AddDefaultUI(); //Scafold sayfalarını aktifleştimek için
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Auth/Login";       // Varsayılan (/Account/Login) yerine bunu kullan
+    options.LogoutPath = "/Auth/Logout";    
+    options.AccessDeniedPath = "/Auth/AccessDenied"; 
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

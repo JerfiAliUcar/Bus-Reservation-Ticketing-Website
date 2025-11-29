@@ -98,6 +98,11 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
 
         //[HttpPost]
         //public IActionResult Register(RegisterViewModel model)

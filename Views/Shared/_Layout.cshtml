@@ -26,8 +26,24 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item"><a class="nav-link" href="#">Selam, @User.Identity.Name</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Logout">Çıkış</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Selam, @User.Identity.Name
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" asp-controller="Booking" asp-action="MyBookings">
+                                    <i class="fa fa-ticket"></i> Biletlerim
+                                </a>
+
+                                <div class="dropdown-divider"></div>
+
+                                <form class="form-inline" asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
+                                    <button type="submit" class="dropdown-item text-danger" style="cursor:pointer;">
+                                        <i class="fa fa-sign-out"></i> Çıkış Yap
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
                     }
                     else
                     {

@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Bus_Reservation_Ticketing_Website.Data.Entity.Booking>
+
+<div class="container mt-5 mb-5">
+    <h2 class="mb-4">Biletlerim</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Henüz hiç bilet almamışsınız.</div>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Sefer Ara</a>
+    }
+    else
+    {
+        <div class="card shadow">
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>PNR</th>
+                            <th>Tarih</th>
+                            <th>Güzergah</th>
+                            <th>Koltuklar</th>
+                            <th>Tutar</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="font-weight-bold text-primary">@item.Pnr</td>
+                                <td>@item.BookingDate?.ToString("dd.MM.yyyy")</td>
+                                <td>
+                                    @item.Tickets.FirstOrDefault()?.Schedule.Route.Origin >
+                                    @item.Tickets.FirstOrDefault()?.Schedule.Route.Destination
+                                </td>
+                                <td>
+                                    @foreach (var ticket in item.Tickets)
+                                    {
+                                        <span class="badge bg-secondary">@ticket.SeatNumber</span>
+                                    }
+                                </td>
+                                <td>@item.TotalAmount ₺</td>
+                                <td>
+                                    @if (item.BookingStatus == "Confirmed")
+                                    {
+                                        <span class="badge bg-success">Onaylandı</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">İptal</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
