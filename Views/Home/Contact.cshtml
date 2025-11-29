@@ -1,13 +1,19 @@
-﻿<section class="about-banner banner-inner">
+﻿@model ContactViewModel
+@{
+        ViewData["Title"] = "İletişim";            
+}
+
+<section class="about-banner banner-inner">
     <div class="overlay-bg"></div>
     <div class="container banner-content text-center">
-        <h1>İletişim</h1>
+        <h1 class="text-white">İletişim</h1>
     </div>
 </section>
 
 <section class="section-gap">
     <div class="container">
         <div class="row">
+            
             <div class="col-lg-4">
                 <div class="mb-4">
                     <h5><i class="fa fa-home text-warning mr-2"></i> Adres</h5>
@@ -22,16 +28,44 @@
                     <p>destek@bustravel.com</p>
                 </div>
             </div>
+
             <div class="col-lg-8">
-                <form>
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-@ViewBag.MessageType mb-4" role="alert">
+                        @ViewBag.Message
+                    </div>
+                }
+
+                <form asp-controller="Home" asp-action="Contact" method="post">
                     <div class="row">
-                        <div class="col-md-6 form-group"><input class="form-control" placeholder="Adınız"></div>
-                        <div class="col-md-6 form-group"><input class="form-control" placeholder="E-posta"></div>
-                        <div class="col-12 form-group"><textarea class="form-control" rows="5" placeholder="Mesajınız"></textarea></div>
-                        <div class="col-12"><button class="primary-btn">Gönder</button></div>
+                        <div class="col-md-6 form-group">
+                            <label class="form-label" asp-for="Name"></label>
+                            <input type="text" class="form-control" asp-for="Name" placeholder="Adınız Soyadınız">
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            <label class="form-label" asp-for="Email"></label>
+                            <input type="email" class="form-control" asp-for="Email" placeholder="E-posta Adresiniz">
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label class="form-label" asp-for="Subject"></label>
+                            <input type="text" asp-for="Subject" class="form-control" placeholder="Konu">
+                        </div>
+
+                        <div class="col-12 form-group">
+                            <label class="form-label" asp-for="Message"></label>
+                            <textarea class="form-control" rows="5" asp-for="Message" placeholder="Mesajınız"></textarea>
+                        </div>
+
+                        <div class="col-12 text-right">
+                            <button type="submit" asp-controller="Home" asp-action="Contact" class="primary-btn text-white border-0">Gönder</button>
+                        </div>
                     </div>
                 </form>
             </div>
+
         </div>
     </div>
 </section>
