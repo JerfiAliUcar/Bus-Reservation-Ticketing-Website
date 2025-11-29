@@ -25,6 +25,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>
     public virtual DbSet<Schedule> Schedules { get; set; }
     public virtual DbSet<Ticket> Tickets { get; set; }
     public virtual DbSet<TicketAuditLog> TicketAuditLogs { get; set; }
+    public virtual DbSet<ContactMessage> ContactMessages { get; set; }
 
     // GÜVENLİK VE ÇAKIŞMA ÖNLEMİ:
     // OnConfiguring metodunu kapatıyoruz çünkü ayarları Program.cs dosyasından alacağız.

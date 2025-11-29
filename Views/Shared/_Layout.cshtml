@@ -31,11 +31,19 @@
                                 Selam, @User.Identity.Name
                             </a>
                             <div class="dropdown-menu" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" asp-controller="Booking" asp-action="MyBookings">
+                                <a class="dropdown-item text-primary font-weight-bold" asp-controller="Booking" asp-action="MyBookings">
                                     <i class="fa fa-ticket"></i> Biletlerim
                                 </a>
 
                                 <div class="dropdown-divider"></div>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="dropdown-item text-primary font-weight-bold" asp-area="Admin" asp-controller="Bus" asp-action="Index"> 
+                                        <i class="fa fa-cogs"></i> Yönetim Paneli
+                                    </a>
+                            
+                                    <div class="dropdown-divider"></div>
+                                }
 
                                 <form class="form-inline" asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
                                     <button type="submit" class="dropdown-item text-danger" style="cursor:pointer;">

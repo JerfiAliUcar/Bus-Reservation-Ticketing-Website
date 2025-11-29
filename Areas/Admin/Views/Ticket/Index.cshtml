@@ -1,0 +1,98 @@
+﻿@using Bus_Reservation_Ticketing_Website.Data.Entity
+@model IEnumerable<Ticket>
+
+@{
+    ViewData["Title"] = "Bilet Yönetimi";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+
+    <h1 class="h3 mb-4 text-gray-800">Satılan Biletler</h1>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Bilet Arama</h6>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" name="searchPnr" value="@ViewBag.SearchPnr" class="form-control" placeholder="PNR Kodu Girin (Örn: X92..)">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" name="searchName" value="@ViewBag.SearchName" class="form-control" placeholder="Yolcu Adı Girin">
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> Ara
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>PNR</th>
+                            <th>Yolcu</th>
+                            <th>Güzergah</th>
+                            <th>Tarih</th>
+                            <th>Koltuk</th>
+                            <th>Tutar</th>
+                            <th>Durum</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="font-weight-bold">@item.Booking.Pnr</td>
+                                <td>
+                                    @item.PassengerName<br />
+                                    <small class="text-muted">@item.PassengerGender</small>
+                                </td>
+                                <td>
+                                    @item.Schedule.Route.Origin > @item.Schedule.Route.Destination
+                                    <br />
+                                    <small class="text-muted">@item.Schedule.Bus.FirmName</small>
+                                </td>
+                                <td>@item.Schedule.DepartureTime.ToString("dd.MM.yyyy HH:mm")</td>
+                                <td class="text-center">
+                                    <span class="badge badge-warning text-dark" style="font-size:14px;">@item.SeatNumber</span>
+                                </td>
+                                <td>@item.PaidAmount ₺</td>
+                                <td>
+                                    @if (item.Booking.BookingStatus == "Confirmed")
+                                    {
+                                        <span class="badge badge-success">Onaylı</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">İptal</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Booking.BookingStatus == "Confirmed")
+                                    {
+                                        <form asp-action="Cancel" method="post" onsubmit="return confirm('Bu bileti/rezervasyonu Admin yetkisiyle iptal etmek istediğinize emin misiniz?');">
+                                            <input type="hidden" name="id" value="@item.TicketId" />
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-ban"></i> İptal
+                                            </button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
