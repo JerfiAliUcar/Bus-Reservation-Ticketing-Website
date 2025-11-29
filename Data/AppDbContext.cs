@@ -66,6 +66,8 @@ public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>
 
         modelBuilder.Entity<Booking>(entity =>
         {
+            entity.ToTable(tb => tb.HasTrigger("trg_BookingCancellationAudit"));
+            // ---------------------
             entity.HasKey(e => e.BookingId);
             entity.HasIndex(e => e.Pnr, "UQ_Bookings_PNR").IsUnique();
             entity.Property(e => e.BookingDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
@@ -73,23 +75,7 @@ public partial class AppDbContext : IdentityDbContext<AppUser, IdentityRole<int>
             entity.Property(e => e.Pnr).HasMaxLength(10).HasColumnName("PNR");
             entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.UserId).HasColumnType("int");
-            //entity.HasKey(e => e.BookingId); // Rastgele PK ismini sildik, standart olsun.
-
-            //entity.HasIndex(e => e.Pnr, "UQ_Bookings_PNR").IsUnique(); // İsim düzeldi
-
-            //entity.Property(e => e.BookingDate).HasDefaultValueSql("(getdate())").HasColumnType("datetime");
-            //entity.Property(e => e.BookingStatus).HasMaxLength(20).HasDefaultValue("Confirmed");
-            //entity.Property(e => e.Pnr).HasMaxLength(10).HasColumnName("PNR");
-            //entity.Property(e => e.TotalAmount).HasColumnType("decimal(18, 2)");
-
-            //// UserId'nin INT olduğunu ve Users tablosuna bağlı olduğunu belirtiyoruz:
-            //entity.Property(e => e.UserId).HasColumnType("int");
-
-            //// Opsiyonel: Eğer Booking -> User ilişkisi (FK) kesin olsun istiyorsan:
-            //entity.HasOne<AppUser>()
-            //      .WithMany()
-            //      .HasForeignKey(e => e.UserId)
-            //      .OnDelete(DeleteBehavior.SetNull); // Kullanıcı silinirse geçmiş biletleri kalsın (UserId null olur)
+           
         });
 
         modelBuilder.Entity<Bus>(entity =>

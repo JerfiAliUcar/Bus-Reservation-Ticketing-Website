@@ -43,11 +43,18 @@
                                 <td>
                                     @if (item.BookingStatus == "Confirmed")
                                     {
-                                        <span class="badge bg-success">Onaylandı</span>
+                                        <span class="badge bg-success mb-2">Onaylandı</span>
+                                        <br />
+                                        <form asp-action="Cancel" asp-route-id="@item.BookingId" method="post" style="display:inline;">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    onclick="return confirm('Bu bileti iptal etmek istediğinize emin misiniz?');">
+                                                İptal Et
+                                            </button>
+                                        </form>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-danger">İptal</span>
+                                        <span class="badge bg-secondary">İptal Edildi</span>
                                     }
                                 </td>
                             </tr>

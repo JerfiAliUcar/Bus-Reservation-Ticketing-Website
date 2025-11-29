@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bus_Reservation_Ticketing_Website.Controllers
 {
-    [Authorize] // Sadece giriş yapmış kullanıcılar bilet alabilir
+    [Authorize]
     public class BookingController : Controller
     {
         private readonly AppDbContext _context;
@@ -17,8 +17,7 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
             _context = context;
         }
 
-        // 1. ÖDEME SAYFASI (GET)
-        // HTML Formundan gelen verileri otomatik alıyoruz
+
         public async Task<IActionResult> Create(int scheduleId, List<int> selectedSeats)
         {
             if (selectedSeats == null || !selectedSeats.Any())
@@ -34,7 +33,7 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
 
             if (schedule == null) return NotFound();
 
-            // Verileri View'a taşı
+
             ViewBag.SelectedSeats = selectedSeats;
             // Listeyi string'e çevirip (5,6 gibi) POST metoduna saklamak için Viewbag'e atıyoruz
             ViewBag.SeatString = string.Join(",", selectedSeats);
@@ -42,8 +41,7 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
 
             return View(schedule);
         }
-        // 2. ÖDEMEYİ TAMAMLA (POST)
-        // Kart bilgisi almıyoruz, sadece yolcu bilgilerini alıyoruz.
+
         [HttpPost]
         public async Task<IActionResult> Create(int scheduleId, string selectedSeats, string passengerName, string passengerTCKN, string passengerPhone, string passengerEmail)
         {
@@ -113,7 +111,7 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
             }
         }
 
-        // 3. BİLETLERİM SAYFASI (Şimdilik basit bir placeholder)
+
         public async Task<IActionResult> MyBookings()
         {
             var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -130,7 +128,30 @@ namespace Bus_Reservation_Ticketing_Website.Controllers
             return View(bookings);
         }
 
-        // Yardımcı Metot: Rastgele PNR Üretici (Örn: X92B4A)
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+
+            if (booking == null)
+            {
+                return NotFound();
+            }
+
+            //Şu anki kullanıcının Id'sini alıyoruz (altta da başkasının biletini iptal etmesin diye kontorl yapacağz)
+            var currentUserIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(currentUserIdString, out int currentUserId) || booking.UserId != currentUserId)
+            {
+                return Unauthorized(); // Bu bilet senin değil.
+            }
+
+            booking.BookingStatus = "Cancelled";
+
+            await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Biletiniz başarıyla iptal edildi.";
+            return RedirectToAction(nameof(MyBookings));
+        }
+
         private string GeneratePNR()
         {
             return Guid.NewGuid().ToString().Substring(0, 6).ToUpper();
