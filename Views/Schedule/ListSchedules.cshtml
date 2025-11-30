@@ -4,7 +4,7 @@
 <section class="about-banner banner-inner">
     <div class="overlay-bg"></div>
     <div class="container banner-content text-center">
-        <h1>Sefer Sonuçları</h1>
+        <h1 class="text-light">Sefer Sonuçları</h1>
     </div>
 </section>
 
@@ -45,7 +45,7 @@
                             </div>
                             <div class="col-md-3 text-center border-left">
                                 <span class="price-tag mb-2">@item.Price₺</span>
-                                <a href="seat-selection.html" class="primary-btn btn-sm">Koltuk Seç</a>
+                                <a asp-action="Details" asp-route-id="@Model.First().Id" class="primary-btn btn-sm">Koltuk Seç</a>
                             </div>
                         </div>
                     </div>
