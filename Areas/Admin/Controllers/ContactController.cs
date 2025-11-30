@@ -28,15 +28,5 @@ namespace Bus_Reservation_Ticketing_Website.Areas.Admin.Controllers
             }
             return RedirectToAction("Index");
         }
-        public async Task<IActionResult> MarkAsRead(int id)
-        {
-            var message = await _dbContext.ContactMessages.FindAsync(id);
-            if (message != null)
-            {
-                message.IsRead = true;
-                await _dbContext.SaveChangesAsync();
-            }
-            return RedirectToAction(nameof(Index));
-        }
     }
 }

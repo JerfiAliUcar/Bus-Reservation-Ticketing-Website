@@ -29,35 +29,20 @@
                     <tbody>
                         @foreach (var item in Model)
                         {
-                            // Okunmamış mesajlar için satırı koyu renklendirelim veya yazıyı kalın yapalım
-                            var rowClass = item.IsRead ? "" : "font-weight-bold bg-light";
-
-                            <tr class="@rowClass">
-                                <td style="width: 15%">@item.SentDate.ToString("dd.MM.yyyy HH:mm")</td>
+                            <tr>
+                                <td>@item.SentDate.ToString("dd.MM.yyyy HH:mm")</td>
                                 <td>
-                                    @item.Name<br>
+                                    <strong>@item.Name</strong><br>
                                     <small class="text-muted">@item.Email</small>
                                 </td>
+                                <td class="font-weight-bold">@item.Subject</td>
                                 <td>
-                                    @if (!item.IsRead)
-                                    {
-                                        <span class="badge badge-warning">YENİ</span>
-                                    }
-                                    @item.Subject
+                                    @item.Message
                                 </td>
-                                <td>@item.Message</td>
-                                <td class="text-center" style="width: 150px;">
-
-                                    @if (!item.IsRead)
-                                    {
-                                        <a class="btn btn-success btn-sm mb-1" asp-action="MarkAsRead" asp-route-id="@item.Id" title="Okundu Olarak İşaretle">
-                                            <i class="fas fa-check"></i>
-                                        </a>
-                                    }
-
-                                    <a class="btn btn-danger btn-sm mb-1" asp-action="Delete" asp-route-id="@item.Id"
-                                       onclick="return confirm('Bu mesajı silmek istediğinize emin misiniz?');" title="Sil">
-                                        <i class="fas fa-trash"></i>
+                                <td class="text-center">
+                                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id"
+                                       onclick="return confirm('Bu mesajı silmek istediğinize emin misiniz?');">
+                                        <i class="fas fa-trash"></i> Sil
                                     </a>
                                 </td>
                             </tr>
