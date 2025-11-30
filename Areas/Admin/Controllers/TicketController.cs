@@ -18,14 +18,22 @@ namespace Bus_Reservation_Ticketing_Website.Areas.Admin.Controllers
             var ticketsQuery = _context.Tickets
                 .Include(t => t.Booking)
                 .Include(t => t.Schedule).ThenInclude(s => s.Route)
-                .Include(t => t.Schedule).ThenInclude(s => s.Bus).AsQueryable();
+                .Include(t => t.Schedule).ThenInclude(s => s.Bus)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchPnr))
             {
                 ticketsQuery = ticketsQuery.Where(t => t.Booking.Pnr.Contains(searchPnr));
             }
 
-            var tickets = await ticketsQuery.OrderByDescending(t => t.Booking.BookingDate).ToListAsync();
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                ticketsQuery = ticketsQuery.Where(t => t.PassengerName.Contains(searchName));
+            }
+
+            var tickets = await ticketsQuery
+                .OrderByDescending(t => t.Booking.BookingDate)
+                .ToListAsync();
 
             ViewBag.SearchPnr = searchPnr;
             ViewBag.SearchName = searchName;

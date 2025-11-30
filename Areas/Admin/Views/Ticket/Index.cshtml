@@ -15,11 +15,13 @@
             <h6 class="m-0 font-weight-bold text-primary">Bilet Arama</h6>
         </div>
         <div class="card-body">
-            <form method="get" class="row g-3">
+            <form method="get" class="row g-3 align-items-end">
                 <div class="col-md-4">
-                    <input type="text" name="searchPnr" value="@ViewBag.SearchPnr" class="form-control" placeholder="PNR Kodu Girin (Örn: X92..)">
+                    <label class="form-label">PNR Kodu</label>
+                    <input type="text" name="searchPnr" value="@ViewBag.SearchPnr" class="form-control" placeholder="Örn: X92..">
                 </div>
                 <div class="col-md-4">
+                    <label class="form-label">Yolcu Adı</label>
                     <input type="text" name="searchName" value="@ViewBag.SearchName" class="form-control" placeholder="Yolcu Adı Girin">
                 </div>
                 <div class="col-md-4">
