@@ -1,0 +1,53 @@
+USE BusReservationDB
+GO
+
+CREATE OR ALTER PROCEDURE sp_Admin_CancelBooking
+    @BookingId INT,
+    @AdminUserId INT, -- İşlemi yapan adminin ID'si (Log için)
+    @ResultStatus BIT OUTPUT, -- Başarılı mı? (1/0)
+    @ResultMessage NVARCHAR(500) OUTPUT -- Hata mesajı
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Transaction Başlatıyoruz
+    BEGIN TRANSACTION;
+
+    BEGIN TRY
+        -- 1. Kontrol: Böyle bir rezervasyon var mı?
+        IF NOT EXISTS (SELECT 1 FROM Bookings WHERE BookingId = @BookingId)
+        BEGIN
+            SET @ResultMessage = 'Rezervasyon bulunamadı.';
+            THROW 51000, 'Rezervasyon bulunamadı.', 1;
+        END
+
+        -- 2. Kontrol: Zaten iptal edilmiş mi?
+        IF EXISTS (SELECT 1 FROM Bookings WHERE BookingId = @BookingId AND BookingStatus = 'Cancelled')
+        BEGIN
+            SET @ResultMessage = 'Bu rezervasyon zaten iptal edilmiş.';
+            THROW 51000, 'Zaten iptal edilmiş.', 1;
+        END
+
+        -- 3. İşlem: Durumu güncelle
+        UPDATE Bookings 
+        SET BookingStatus = 'Cancelled' 
+        WHERE BookingId = @BookingId;
+
+        -- 4. Loglama: Manuel bir log ekleyebiliriz (Trigger zaten çalışacak ama SP içinde de iş yapalım)
+        -- (Burada trigger'ın devreye girmesi beklenir, ekstra işleme gerek yok)
+
+        -- Hata yoksa işlemi onayla
+        COMMIT TRANSACTION;
+        
+        SET @ResultStatus = 1;
+        SET @ResultMessage = 'İşlem başarıyla tamamlandı.';
+    END TRY
+    BEGIN CATCH
+        -- Hata olursa işlemleri geri al
+        ROLLBACK TRANSACTION;
+
+        SET @ResultStatus = 0;
+        SET @ResultMessage = ERROR_MESSAGE();
+    END CATCH
+END
+GO

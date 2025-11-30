@@ -13,54 +13,82 @@
 </head>
 <body>
     <header id="header">
-        <div class="container d-flex align-items-center justify-content-between">
-            <div id="logo">
-                <a asp-controller="Home" asp-action="Index" class="h4 text-white font-weight-bold">BUS TRAVEL</a>
-            </div>
-            <nav class="nav-menu d-none d-lg-block">
-                <ul class="navbar-nav d-flex flex-row">
-                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Ana Sayfa</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Schedule" asp-action="ListSchedules">Seferler</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="AboutUs">Hakkımızda</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">İletişim</a></li>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
 
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Selam, @User.Identity.Name
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="userDropdown">
-                                <a class="dropdown-item text-primary font-weight-bold" asp-controller="Booking" asp-action="MyBookings">
-                                    <i class="fa fa-ticket"></i> Biletlerim
+                <a class="navbar-brand font-weight-bold" asp-controller="Home" asp-action="Index" style="font-size: 24px;">
+                    BUS TRAVEL
+                </a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav ml-auto align-items-center">
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Index">Ana Sayfa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Schedule" asp-action="ListSchedules">Seferler</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="AboutUs">Hakkımızda</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-controller="Home" asp-action="Contact">İletişim</a>
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown ml-lg-3">
+                                <a class="nav-link dropdown-toggle btn btn-outline-light px-3" href="#" id="userDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-user-circle mr-1"></i> @User.Identity.Name
                                 </a>
 
-                                <div class="dropdown-divider"></div>
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <a class="dropdown-item text-primary font-weight-bold" asp-area="Admin" asp-controller="Bus" asp-action="Index"> 
-                                        <i class="fa fa-cogs"></i> Yönetim Paneli
-                                    </a>
-                            
-                                    <div class="dropdown-divider"></div>
-                                }
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
 
-                                <form class="form-inline" asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
-                                    <button type="submit" class="dropdown-item text-danger" style="cursor:pointer;">
-                                        <i class="fa fa-sign-out"></i> Çıkış Yap
-                                    </button>
-                                </form>
-                            </div>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Login">Giriş</a></li>
-                        <li class="nav-item"><a class="nav-link" asp-controller="Auth" asp-action="Register">Kayıt</a></li>
-                    }
-                </ul>
-            </nav>
-        </div>
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a class="dropdown-item text-danger font-weight-bold" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                                            <i class="fa fa-cogs fa-sm fa-fw mr-2"></i> Yönetim Paneli
+                                        </a>
+                                        <div class="dropdown-divider"></div>
+                                    }
+
+                                    <a class="dropdown-item" asp-area="" asp-controller="Booking" asp-action="MyBookings">
+                                        <i class="fa fa-ticket fa-sm fa-fw mr-2"></i> Biletlerim
+                                    </a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <form class="form-inline" asp-area="" asp-controller="Auth" asp-action="Logout" method="post">
+                                        <button type="submit" class="dropdown-item text-muted" style="cursor:pointer;">
+                                            <i class="fa fa-sign-out fa-sm fa-fw mr-2"></i> Çıkış Yap
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item ml-lg-3">
+                                <a class="nav-link btn btn-sm btn-light text-dark px-3 mb-2 mb-lg-0"
+                                   asp-controller="Auth" asp-action="Login">Giriş</a>
+                            </li>
+                            <li class="nav-item ml-lg-2">
+                                <a class="nav-link btn btn-sm btn-warning text-dark px-3"
+                                   asp-controller="Auth" asp-action="Register">Kayıt Ol</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
     </header>
     <div class="container-fluid p-0">
         @RenderBody()
