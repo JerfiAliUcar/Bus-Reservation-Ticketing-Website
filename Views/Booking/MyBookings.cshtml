@@ -17,6 +17,7 @@
                         <tr>
                             <th>PNR</th>
                             <th>Tarih</th>
+                            <th>Kalkış tarihi</th>
                             <th>Güzergah</th>
                             <th>Koltuklar</th>
                             <th>Tutar</th>
@@ -29,6 +30,7 @@
                             <tr>
                                 <td class="font-weight-bold text-primary">@item.Pnr</td>
                                 <td>@item.BookingDate?.ToString("dd.MM.yyyy")</td>
+                                <td>@item.Tickets.First().Schedule.DepartureTime.ToString("dd.MM.yyyy")</td>
                                 <td>
                                     @item.Tickets.FirstOrDefault()?.Schedule.Route.Origin >
                                     @item.Tickets.FirstOrDefault()?.Schedule.Route.Destination
